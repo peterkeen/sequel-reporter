@@ -27,3 +27,27 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+
+
+## To port from ledger web or write new
+
+[ ] report class
+[ ] field templates
+[ ] helpers
+[ ] project structure
+[x] config file format
+[ ] generator
+[ ] database
+
+So the idea is that you run "sequel-reporter new directory-name" and get a new sequel-reporter project, which consists of:
+
+- Gemfile
+- Rakefile
+- reporter_config.rb # instance of Sequel::Reporter::Config
+- config.ru          # for running the app
+- layouts/           # where report layouts live
+- lib/               # auto-loaded at app start time
+- migrate/           # holds database migrations
+- public/            # assets that the layouts depend on
+- reports/           # where reports actually live. subdir == menu

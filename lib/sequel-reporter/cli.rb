@@ -7,17 +7,18 @@ module Sequel::Reporter
 
     desc "new NAME","Create a new Sequel::Reporter project"
     def new(name)
+      @name = name
+
       empty_directory(name)
       self.destination_root = name
       copy_file("Gemfile")
-      copy_file("Rakefile")
-      copy_file("reporter_config.rb")
-      copy_file("config.ru")
-      directory("layouts")
+      template("Rakefile.tt", "Rakefile")
+      template("application.rb.tt", "application.rb")
+      template("config.ru")
       directory("lib")
       directory("migrate")
       directory("public")
-      directory("reports")
+      directory("views")
     end
 
     def self.source_root

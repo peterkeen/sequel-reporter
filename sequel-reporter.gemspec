@@ -18,9 +18,10 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency('thor')
-  gem.add_dependency('sqlite3')
   gem.add_dependency('rspec')
   gem.add_dependency('sinatra')
   gem.add_dependency('sinatra-contrib')
   gem.add_dependency('sequel')
+
+  gem.add_development_dependency('sqlite3')
 end

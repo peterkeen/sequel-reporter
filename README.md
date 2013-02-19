@@ -1,6 +1,6 @@
 # Sequel::Reporter
 
-`Sequel::Reporter` is a small opinionated framework for writing web-based reports using the [Sequel](http://sequel.rubyforge.org) database toolkit. It provides a simple structure and helpers for easily writing reports.
+`Sequel::Reporter` is a small opinionated framework for writing web-based reports using the [Sequel](http://sequel.rubyforge.org) database toolkit. It provides a simple structure and helpers for easily writing reports. There's a [tiny demo](http://sequel-reporter-demo.herokuapp.com) if you want to see an example.
 
 ## Installation
 

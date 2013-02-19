@@ -6,6 +6,7 @@ module Sequel::Reporter
   class Application < Sinatra::Base
 
     helpers Sinatra::Capture
+    helpers Sequel::Reporter::Helpers
 
     set :render_engine, :erb
     set :database_url, ENV['DATABASE_URL']
@@ -13,10 +14,10 @@ module Sequel::Reporter
     attr_reader :db
 
     before do
-      Report.params = params
+      Sequel::Reporter::Report.params = params
 
       @reports = []
-      Dir.glob(File.join(settings.root, "views", "reports")).each do |report|
+      Dir.glob(File.join(settings.root, "views", "reports", "*")).each do |report|
         name = File.basename(report, File.extname(report))
         @reports << [name, name.capitalize]
       end
@@ -30,7 +31,7 @@ module Sequel::Reporter
 
     get '/*' do
       begin
-        render settings.render_engine, params[:splat].to_sym
+        render settings.render_engine, params[:splat][0].to_sym
       rescue Exception => e
         @error = e
         render :erb, :error
@@ -38,8 +39,13 @@ module Sequel::Reporter
     end
 
     def initialize(app=nil)
-      super(app)
       @db = Sequel.connect(self.class.settings.database_url)
+
+      path = File.join(settings.root, "lib", "**", "*.rb")
+      Dir.glob(path).each do |file|
+        require file
+      end
+      super(app)
     end
   end
 end

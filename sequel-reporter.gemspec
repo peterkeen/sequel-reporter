@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = Sequel::Reporter::VERSION
   gem.authors       = ["Pete Keen"]
   gem.email         = ["peter.keen@bugsplat.info"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
-  gem.homepage      = ""
+  gem.description   = %q{An opinionated framework for writing reporting applications}
+  gem.summary       = %q{An opinionated framework for writing reporting applications}
+  gem.homepage      = "https://github.com/peterkeen/sequel-reporter"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

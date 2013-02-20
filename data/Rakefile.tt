@@ -3,8 +3,25 @@ require './application'
 require 'sequel/extensions/migration'
 
 namespace :db do
-  task :migrate => :environment do
+  task :migrate do
     app = <%= @name.capitalize %>::Application.new
-    Sequel::Migrator.apply(app.db, 'migrate')
+    db = Sequel.connect(<%= @name.capitalize %>::Application.settings.database_url)
+    Sequel::Migrator.apply(db, 'migrate')
+  end
+end
+
+task :console do
+  IRB.setup(nil)
+  irb = IRB::Irb.new
+  IRB.conf[:MAIN_CONTEXT] = irb.context
+  irb.context.evaluate("require 'irb/completion'", 0)
+  irb.context.evaluate("APP = <%= @name.capitalize %>::Application.new", 0)
+  irb.context.evaluate("DB = Sequel.connect(<%= @name.capitalize %>::Application.settings.database_url)", 0)
+
+  trap("SIGINT") do
+    irb.signal_handle
+  end
+  catch(:IRB_EXIT) do
+    irb.eval_input
   end
 end

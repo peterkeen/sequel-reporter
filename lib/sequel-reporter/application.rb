@@ -44,7 +44,7 @@ module Sequel::Reporter
 
       path = File.join(settings.root, "lib", "**", "*.rb")
       Dir.glob(path).each do |file|
-        puts "requiring #{file}"
+        next if file.match(/ruby\/1.9.1/) # in case ruby somehow got in the lib directory (don't ask)
         require file
       end
       super(app)

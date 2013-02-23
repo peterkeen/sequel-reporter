@@ -2,11 +2,14 @@ require 'rubygems'
 require './application'
 require 'sequel/extensions/migration'
 
+task :environment do
+  APP = <%= @name.capitalize %>::Application.new
+  DB = Sequel.connect(<%= @name.capitalize %>::Application.settings.database_url)
+end
+
 namespace :db do
-  task :migrate do
-    app = <%= @name.capitalize %>::Application.new
-    db = Sequel.connect(<%= @name.capitalize %>::Application.settings.database_url)
-    Sequel::Migrator.apply(db, 'migrate')
+  task :migrate => :environment do
+    Sequel::Migrator.apply(DB, 'migrate')
   end
 end
 

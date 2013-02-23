@@ -5,7 +5,6 @@ require 'sequel'
 module Sequel::Reporter
   class Application < Sinatra::Base
 
-    helpers Sinatra::Capture
     helpers Sequel::Reporter::Helpers
 
     set :render_engine, :erb
@@ -45,6 +44,7 @@ module Sequel::Reporter
 
       path = File.join(settings.root, "lib", "**", "*.rb")
       Dir.glob(path).each do |file|
+        puts "requiring #{file}"
         require file
       end
       super(app)

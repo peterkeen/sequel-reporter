@@ -48,5 +48,20 @@ module Sequel::Reporter
       display_value
     end
 
+    def protected!
+      unless self.send(settings.authorization_func)
+        response['WWW-Authenticate'] = %(Basic realm="Restricted Area")
+        throw(:halt, [401, "Not authorized\n"])
+      end
+    end
+
+    def authorized
+      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+      unless ENV['USERNAME'] && ENV['PASSWORD']
+        return true
+      end
+      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == [ENV['USERNAME'], ENV['PASSWORD']]
+    end
+
   end
 end

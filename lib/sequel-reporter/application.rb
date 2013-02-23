@@ -10,6 +10,7 @@ module Sequel::Reporter
 
     set :render_engine, :erb
     set :database_url, ENV['DATABASE_URL']
+    set :authorization_func, :authorized
 
     attr_reader :db
 
@@ -30,6 +31,7 @@ module Sequel::Reporter
     end
 
     get '/*' do
+      protected!
       begin
         render settings.render_engine, params[:splat][0].to_sym
       rescue Exception => e

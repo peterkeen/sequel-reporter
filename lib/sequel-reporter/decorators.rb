@@ -47,4 +47,15 @@ module Sequel::Reporter
     end
   end
 
+  class HighlightDecorator
+    def initialize(color)
+      @color = color
+    end
+
+    def decorate(cell, row)
+      cell.style['background-color'] = @color
+      cell
+    end
+  end
+
 end

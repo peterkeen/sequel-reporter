@@ -90,5 +90,15 @@ describe Sequel::Reporter::Table do
       table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\"><a href=\"/something?q=2&now=2013-04-12&title=foo&this=2\">2</a></span></td></tr></tbody></table>")
     end
 
+    it "should decorate with highlight decorator" do
+      report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things")
+      table = Sequel::Reporter::Table.new(report) do |t|
+        t.decorate :all => Sequel::Reporter::HighlightDecorator.new('#00FF00')
+      end
+
+      now = DateTime.now.strftime('%Y-%m-%d')
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"background-color:#00FF00\"><span class=\"pull-left\">2</span></td></tr></tbody></table>")
+    end
+
   end
 end

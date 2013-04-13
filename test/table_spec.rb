@@ -40,6 +40,15 @@ describe Sequel::Reporter::Table do
       table.render.should eq("<table ><thead><tr><th>something</th></tr></thead><tbody><tr><td align=\"right\" style=\"\">hi</td></tr><tr><td align=\"left\" style=\"\">ho</td></tr></tbody></table>")
     end
 
+    it "should decorate all cells if given all symbol" do
+      report = Sequel::Reporter::Report.from_query(@db, "select id, something from things order by id limit 1")
+      table = Sequel::Reporter::Table.new(report) do |t|
+        t.decorate :all => RightAlignDecorator.new
+      end
+
+      table.render.should eq("<table ><thead><tr><th>id</th><th>something</th></tr></thead><tbody><tr><td align=\"right\" style=\"\">1</td><td align=\"right\" style=\"\">hi</td></tr></tbody></table>")
+    end
+
     it "should decorate with multiple" do
       report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things")
       table = Sequel::Reporter::Table.new(report) do |t|

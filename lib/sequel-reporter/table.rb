@@ -14,6 +14,10 @@ module Sequel::Reporter
       @decorators << decorator
     end
 
+    def clear_decorators
+      @decorators.clear
+    end
+
     def link href
       if_clause = href.delete(:if)
       href[href.keys.first] = LinkDecorator.new(href.values.first)
@@ -32,7 +36,7 @@ module Sequel::Reporter
             if_clause = dec.delete(:if)
             matcher = dec.keys.first
 
-            next unless cell.title =~ matcher
+            next unless matcher == :all || cell.title =~ matcher
             if if_clause
               next unless if_clause.call(cell, row)
             end

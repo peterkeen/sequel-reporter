@@ -12,8 +12,10 @@ module Sequel::Reporter
     end
 
     def table(report, options = {})
-      links = options[:links] || {}
-      partial(:table, :report => report, :links => links, :render_engine => :erb)
+      Table.new(report) do |t|
+        t.decorate :all => NumberDecorator.new
+        yield t if block_given?
+      end.render
     end
 
     def query(options={}, &block)
@@ -23,29 +25,6 @@ module Sequel::Reporter
         report = report.pivot(options[:pivot], options[:pivot_sort_order])
       end
       report
-    end
-
-    def linkify(links, row, value, display_value)
-      links.each do |key, val|
-        if key.is_a? String
-          key = /^#{key}$/
-        end
-  
-        if key.match(value[1].title.to_s)
-          url = String.new(links[key])
-          row.each_with_index do |v,i|
-            url.gsub!(":#{i}", CGI.escape(v[0].to_s))
-          end
-  
-          url.gsub!(':title', CGI.escape(value[1].title.to_s))
-          url.gsub!(':now', CGI.escape(DateTime.now.strftime('%Y-%m-%d')))
-          display_value = "<a href='#{url}'>#{escape_html(display_value)}</a>"
-        else
-          display_value = escape_html(display_value)
-        end
-
-      end
-      display_value
     end
 
     def protected!

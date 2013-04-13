@@ -9,8 +9,10 @@ module Sequel::Reporter
     end
 
     def decorate(cell, row)
-      cell.align = 'right'
-      cell.text = sprintf("%0.#{@precision}f", cell.value)
+      if cell.value.is_a?(Numeric)
+        cell.align = 'right'
+        cell.text = sprintf("%0.#{@precision}f", cell.value)
+      end
       cell
     end
   end

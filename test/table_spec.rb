@@ -60,5 +60,16 @@ describe Sequel::Reporter::Table do
       now = DateTime.now.strftime('%Y-%m-%d')
       table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\"><i class=\"icon-glass\"></i></td></tr></tbody></table>")
     end
+
+    it "should add attributes to table tag" do
+      report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things")
+      table = Sequel::Reporter::Table.new(report) do |t|
+        t.attributes[:class] = "table table-bordered table-striped table-hover"
+      end
+
+      now = DateTime.now.strftime('%Y-%m-%d')
+      table.render.should eq("<table class=\"table table-bordered table-striped table-hover\"><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\">2</td></tr></tbody></table>")
+    end
+
   end
 end

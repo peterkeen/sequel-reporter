@@ -12,6 +12,7 @@ describe Sequel::Reporter::Table do
   before :each do
     @things.insert(:id => 1, :something => "hi", :other => "2013-02-18")
     @things.insert(:id => 2, :something => "ho", :other => "2013-02-19")
+    @now = DateTime.now.strftime('%Y-%m-%d')
   end
 
   describe "#render" do
@@ -57,7 +58,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\"><a href=\"/something?q=2&now=2013-04-12&title=foo&this=2\">2.000</a></span></td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\"><a href=\"/something?q=2&now=#{@now}&title=foo&this=2\">2.000</a></span></td></tr></tbody></table>")
     end
 
     it "should decorate with icon decorator" do
@@ -87,7 +88,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\"><a href=\"/something?q=2&now=2013-04-12&title=foo&this=2\">2</a></span></td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\"><a href=\"/something?q=2&now=#{@now}&title=foo&this=2\">2</a></span></td></tr></tbody></table>")
     end
 
     it "should decorate with highlight decorator" do

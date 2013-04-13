@@ -22,6 +22,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency('sinatra', '1.4.2')
   gem.add_dependency('sinatra-contrib')
   gem.add_dependency('sequel')
+  gem.add_dependency('rake')
 
   gem.add_development_dependency('sqlite3')
+
 end

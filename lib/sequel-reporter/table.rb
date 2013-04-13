@@ -26,11 +26,11 @@ module Sequel::Reporter
     end
 
     def render
-      header = "<thead><tr>" + @report.fields.map { |f| "<th>#{f}</th>" }.join("") + "</tr></thead>"
       body_rows = []
+      header_aligns = {}
 
       @report.each do |row|
-        body_rows << row.map do |cell|
+        body_rows << row.each_with_index.map do |cell, cell_index|
           @decorators.each do |decorator|
             dec = decorator.dup
             if_clause = dec.delete(:if)
@@ -41,14 +41,16 @@ module Sequel::Reporter
               next unless if_clause.call(cell, row)
             end
             cell = dec[matcher].decorate(cell, row)
+            header_aligns[cell_index] = cell.align
           end
 
           style = cell.style.map { |key, val| "#{key}:#{val}"}.join(";")
-          %Q{<td align="#{cell.align}" style="#{style}">#{cell.text}</td>}
+          %Q{<td style="#{style}"><span class="pull-#{cell.align}">#{cell.text}</span></td>}
         end.join("")
       end
 
       body = "<tbody>" + body_rows.map { |r| "<tr>#{r}</tr>" }.join("") + "</tbody>"
+      header = "<thead><tr>" + @report.fields.each_with_index.map { |f,i| "<th><span class=\"pull-#{header_aligns[i] || 'left'}\">#{f}</span></th>" }.join("") + "</tr></thead>"
 
       attrs = attributes.map { |key,val| "#{key}=\"#{val}\"" }.join(" ")
       "<table #{attrs}>#{header}#{body}</table>"

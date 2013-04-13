@@ -19,7 +19,7 @@ describe Sequel::Reporter::Table do
       report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things")
       table = Sequel::Reporter::Table.new(report)
 
-      table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\">2</td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\">2</span></td></tr></tbody></table>")
     end
 
     it "should decorate" do
@@ -28,7 +28,7 @@ describe Sequel::Reporter::Table do
         t.decorate /foo/ => RightAlignDecorator.new
       end
 
-      table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"right\" style=\"\">2</td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\">2</span></td></tr></tbody></table>")
     end
 
     it "should decorate with if lambda" do
@@ -37,7 +37,7 @@ describe Sequel::Reporter::Table do
         t.decorate /something/ => RightAlignDecorator.new, :if => lambda{|c,r| c.value == 'hi'}
       end
 
-      table.render.should eq("<table ><thead><tr><th>something</th></tr></thead><tbody><tr><td align=\"right\" style=\"\">hi</td></tr><tr><td align=\"left\" style=\"\">ho</td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">something</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\">hi</span></td></tr><tr><td style=\"\"><span class=\"pull-left\">ho</span></td></tr></tbody></table>")
     end
 
     it "should decorate all cells if given all symbol" do
@@ -46,7 +46,7 @@ describe Sequel::Reporter::Table do
         t.decorate :all => RightAlignDecorator.new
       end
 
-      table.render.should eq("<table ><thead><tr><th>id</th><th>something</th></tr></thead><tbody><tr><td align=\"right\" style=\"\">1</td><td align=\"right\" style=\"\">hi</td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">id</span></th><th><span class=\"pull-right\">something</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\">1</span></td><td style=\"\"><span class=\"pull-right\">hi</span></td></tr></tbody></table>")
     end
 
     it "should decorate with multiple" do
@@ -57,7 +57,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"right\" style=\"\"><a href=\"/something?q=2&now=#{now}&title=foo&this=2\">2.000</a></td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-right\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-right\"><a href=\"/something?q=2&now=2013-04-12&title=foo&this=2\">2.000</a></span></td></tr></tbody></table>")
     end
 
     it "should decorate with icon decorator" do
@@ -67,7 +67,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\"><i class=\"icon-glass\"></i></td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\"><i class=\"icon-glass\"></i></span></td></tr></tbody></table>")
     end
 
     it "should add attributes to table tag" do
@@ -77,7 +77,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table class=\"table table-bordered table-striped table-hover\"><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\">2</td></tr></tbody></table>")
+      table.render.should eq("<table class=\"table table-bordered table-striped table-hover\"><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\">2</span></td></tr></tbody></table>")
     end
 
     it "should decorate with link shortcut" do
@@ -87,7 +87,7 @@ describe Sequel::Reporter::Table do
       end
 
       now = DateTime.now.strftime('%Y-%m-%d')
-      table.render.should eq("<table ><thead><tr><th>foo</th></tr></thead><tbody><tr><td align=\"left\" style=\"\"><a href=\"/something?q=2&now=#{now}&title=foo&this=2\">2</a></td></tr></tbody></table>")
+      table.render.should eq("<table ><thead><tr><th><span class=\"pull-left\">foo</span></th></tr></thead><tbody><tr><td style=\"\"><span class=\"pull-left\"><a href=\"/something?q=2&now=2013-04-12&title=foo&this=2\">2</a></span></td></tr></tbody></table>")
     end
 
   end

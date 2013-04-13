@@ -19,7 +19,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency('thor')
   gem.add_dependency('rspec')
-  gem.add_dependency('sinatra')
+  gem.add_dependency('sinatra', '1.4.2')
   gem.add_dependency('sinatra-contrib')
   gem.add_dependency('sequel')
 

@@ -37,10 +37,10 @@ Sequel Reporter uses [Twitter Bootstrap](http://twitter.github.com/bootstrap) fo
 
 The `table` helper takes a query produced by the `query` helper and some options and builds an HTML table. This helper can take an optional block where you can set more options on the table. For example:
 
-    <%= table(@query) do |t| %>
-      <% t.link /Account/ => '/register?account=:this' %>
-      <% t.decorate /Amount/ => Sequel::Reporter::NumberDecorator.new %>
-    <% end %>
+    <%= table(@query) do |t|
+      t.link /Account/ => '/register?account=:this'
+      t.decorate /Amount/ => Sequel::Reporter::NumberDecorator.new
+    end %>
     
 The link method links columns matching the given regex to the given URL pattern. URL patterns can reference the value in the current cell using `:this`, the current date with `:now`, the title of the column with `:title`, and any other value from the row using `:N`, where `N` is the 0-indexed row index. You can write your own decorators. See `sequel-reporter/decorators.rb` for examples.
 

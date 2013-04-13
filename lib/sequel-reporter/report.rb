@@ -1,47 +1,17 @@
 module Sequel::Reporter
-  class Field
 
-    attr_reader :title, :value_type, :span_class
+  class Cell
+    attr_reader :title, :value, :style
+    attr_accessor :text, :align
 
-    def initialize(title, value_type, span_class)
+    def initialize(title, value)
       @title = title
-      @value_type = value_type
-      @span_class = span_class
+      @value = value
+      @style = {}
+      @text = value
+      @align = 'left'
     end
 
-    def ==(other)
-      self.title == other.title && \
-      self.value_type == other.value_type && \
-      self.span_class == other.span_class
-    end
-  end
-
-  class NumberField < Field
-    def initialize(title)
-      super(title, 'number', 'pull-right')
-    end
-  end
-
-  class StringField < Field
-    def initialize(title)
-      super(title, 'string', 'pull-left')
-    end
-  end
-
-  class Value
-    def initialize(val)
-      @val = val
-    end
-
-    def to_s
-      @val
-    end
-  end
-
-  class NumericValue < Value
-    def to_s
-      sprintf("%0.2f", @val)
-    end
   end
 
   class Report
@@ -72,18 +42,13 @@ module Sequel::Reporter
           raise "No data"
         end
         ds.columns.each do |col|
-          value = row[col]
-          if value.is_a? Numeric
-            report.add_field NumberField.new(col.to_s)
-          else
-            report.add_field StringField.new(col.to_s)
-          end
+          report.add_field col.to_s
         end
 
         ds.each do |row|
           vals = []
           ds.columns.each do |col|
-            vals << row[col]
+            vals << Cell.new(col.to_s, row[col])
           end
           report.add_row(vals)
         end
@@ -110,9 +75,9 @@ module Sequel::Reporter
       @rows << row
     end
 
-    def each_row
+    def each
       @rows.each do |row|
-        yield row.zip(@fields)
+        yield row
       end
     end
 
@@ -121,7 +86,7 @@ module Sequel::Reporter
 
       bucket_column_index = 0
       self.fields.each_with_index do |f, i|
-        if f.title == column
+        if f == column
           bucket_column_index = i
           break
         else
@@ -132,14 +97,13 @@ module Sequel::Reporter
       buckets = {}
       new_rows = {}
 
-      self.each_row do |row|
-        key = row[0, bucket_column_index].map { |r| r[0] }
-        bucket_name = row[bucket_column_index][0]
-        bucket_value = row[bucket_column_index + 1][0]
+      self.each do |row|
+        key = row[0, bucket_column_index].map { |r| r.value }
+        bucket_name = row[bucket_column_index].value
+        bucket_value = row[bucket_column_index + 1].value
 
         if not buckets.has_key? bucket_name
-          field = bucket_value.is_a?(Numeric) ? NumberField.new(bucket_name) : StringField.new(bucket_name)
-          buckets[bucket_name] = field
+          buckets[bucket_name] = bucket_name
         end
 
         new_rows[key] ||= {}

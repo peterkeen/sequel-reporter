@@ -11,23 +11,23 @@ describe Sequel::Reporter::Report do
     it "should run a query" do
       report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things")
       rows = []
-      report.each_row do |row|
+      report.each do |row|
         rows << row
       end
 
-      rows[0][0][0].should eq(2)
-      rows[0][0][1].should eq(Sequel::Reporter::NumberField.new('foo'))
+      rows[0][0].value.should eq(2)
+      rows[0][0].title.should eq('foo')
     end
 
     it "should use params" do
       Sequel::Reporter::Report.params = {:blah => "hi"}
       report = Sequel::Reporter::Report.from_query(@db, "select count(1) as foo from things where something = :blah")
       rows = []
-      report.each_row do |row|
+      report.each do |row|
         rows << row
       end
 
-      rows[0][0][0].should eq(1)
+      rows[0][0].value.should eq(1)
     end
   end
 
@@ -43,9 +43,9 @@ describe Sequel::Reporter::Report do
       report = report.pivot("something", "asc")
 
       report.fields.should eq([
-        Sequel::Reporter::StringField.new('other'),
-        Sequel::Reporter::NumberField.new('hi'),
-        Sequel::Reporter::NumberField.new('ho'),
+        'other',
+        'hi',
+        'ho',
       ])
     end
 

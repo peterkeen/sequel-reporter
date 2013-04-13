@@ -14,6 +14,7 @@ module Sequel::Reporter
     def table(report, options = {})
       Table.new(report) do |t|
         t.decorate :all => NumberDecorator.new
+        t.attributes[:class] = 'table table-striped table-hover table-bordered table-condensed'
         yield t if block_given?
       end.render
     end

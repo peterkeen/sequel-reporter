@@ -1,9 +1,7 @@
 $:.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
 
 require 'rspec'
-require 'sequel-reporter/application'
-require 'sequel-reporter/report'
-require 'sequel-reporter/helpers'
+require 'sequel-reporter'
 require 'sequel'
 require 'sqlite3'
 

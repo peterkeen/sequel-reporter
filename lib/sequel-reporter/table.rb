@@ -14,6 +14,13 @@ module Sequel::Reporter
       @decorators << decorator
     end
 
+    def link href
+      if_clause = href.delete(:if)
+      href[href.keys.first] = LinkDecorator.new(href.values.first)
+      href[:if] = if_clause
+      @decorators << href
+    end
+
     def render
       header = "<thead><tr>" + @report.fields.map { |f| "<th>#{f}</th>" }.join("") + "</tr></thead>"
       body_rows = []

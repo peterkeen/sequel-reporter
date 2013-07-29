@@ -30,11 +30,12 @@ module Sequel::Reporter
 
     def self.from_query(db, query)
 
+      new_params = {}
       @@params.each do |key, val|
-        params[key.to_sym] = val
+        new_params[key.to_sym] = val
       end
 
-      ds = db.fetch(query, params)
+      ds = db.fetch(query, new_params)
       report = self.new
       begin
         row = ds.first

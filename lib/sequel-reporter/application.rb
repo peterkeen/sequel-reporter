@@ -43,6 +43,10 @@ module Sequel::Reporter
     def initialize(app=nil)
       @db = Sequel.connect(self.class.settings.database_url)
 
+      if settings.after_db_connect_hook
+        settings.after_db_connect_hook(@db)
+      end
+
       path = File.join(settings.root, "lib", "**", "*.rb")
       Dir.glob(path).each do |file|
         next if file.match(/ruby\/1.9.1/) # in case ruby somehow got in the lib directory (don't ask)
